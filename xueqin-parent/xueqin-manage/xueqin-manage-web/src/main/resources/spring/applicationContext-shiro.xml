@@ -1,0 +1,42 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+	
+	<!--Shiro的web过滤器-->
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<!--shiro核心securityManager-->
+		<property name="securityManager" ref="securityManager"></property>
+		<!--登录的URl-->
+		<property name="loginUrl" value="/rest/login"></property>
+		<!--没有权限访问的uri-->
+		<property name="unauthorizedUrl" value="rest/refuse"></property>
+		<!--自定义过滤器配置-->
+		<!--<property name="filters">-->
+			<!--<map>-->
+				<!--&lt;!&ndash;自定义的formAuthenticationFilter注入到shiroFilter中&ndash;&gt;-->
+				<!--<entry key="authc" value-ref="formAuthenticationFilter"/>-->
+			<!--</map>-->
+		<!--</property>-->
+		<!--过滤器链定义，从上到下执行，一般将/**放在最下-->
+		<property name="filterChainDefinitions">
+			<value>
+					/** = anon
+			</value>
+		</property>
+	</bean>
+
+	<!--shiro核心securityManager安全管理器-->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<!--自定义认证授权-->
+		<property name="realm" ref="myRealm"/>
+		<!---->
+	</bean>
+
+	<!--自定义realm-->
+	<bean id="myRealm" class="feng.xueqin.shiro.MyRealm"></bean>
+</beans>
